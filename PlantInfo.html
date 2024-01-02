@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>  
+    <title> Plants Info </title>
+<!-- CSS only -->
+<link rel="stylesheet" href="plants.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </head>
+<body>
+
+  <!-- F O R M -->
+  <div id = "content">
+    <div class="sidebar" id='sidebar'>
+  <p class="header">Click on a plant to display its information.</p>
+
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="plcommon" placeholder="Common">
+    <label for="plcommon">Common</label>
+  </div><br>
+  <div class="form-floating">
+    <input type="text" class="form-control" id="plbotanical" placeholder="Botanical">
+    <label for="plbotanical">Botanical</label>
+  </div><br>
+  <div class="form-floating">
+    <input type="text" class="form-control" id="plzone" placeholder="Zone">
+    <label for="plzone">Zone</label>
+  </div><br>
+  <div class="form-floating">
+    <input type="text" class="form-control" id="pllight" placeholder="Light:">
+    <label for="pllight">Light</label>
+  </div><br>
+  <div class="form-floating">
+    <input type="text" class="form-control" id="plprice" placeholder="Price">
+    <label for="plprice">Price</label>
+  </div><br>
+  <div class="form-floating">
+    <input type="text" class="form-control" id="plavailability" placeholder="Availability">
+    <label for="plavailability">Availability</label>
+  </div><br>
+  <button type="button" class="btn btn-success" id='btn1' onclick="saveInput();">Save</button><br><br>
+</div>
+</div>
+<div class="table-container">
+    <div id="content-tray">
+  <table  class="table table-hover" id='demo'></table>
+  
+
+  <script>
+    var x,xmlhttp,xmlDoc
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "plants.xml", false);
+    xmlhttp.send();
+    xmlDoc = xmlhttp.responseXML; 
+    x = xmlDoc.getElementsByTagName("PLANT");
+    table="<tr><th>COMMON</th><th>BOTANICAL</th><th>ZONE</th><th>LIGHT</th><th>PRICE</th><th>AVAILABILITY</th></tr>";
+    for (i = 0; i <x.length; i++) { 
+      table += "<tr displayPlantInfo(" + i + ")><td>";
+      table += x[i].getElementsByTagName("COMMON")[0].childNodes[0].nodeValue;
+      table += "</td><td>";
+      table += x[i].getElementsByTagName("BOTANICAL")[0].childNodes[0].nodeValue;
+      table += "</td><td>";
+      table += x[i].getElementsByTagName("ZONE")[0].childNodes[0].nodeValue;
+      table += "</td><td>";
+      table += x[i].getElementsByTagName("LIGHT")[0].childNodes[0].nodeValue;
+      table += "</td><td>";
+      table += x[i].getElementsByTagName("PRICE")[0].childNodes[0].nodeValue;
+      table += "</td><td>";
+      table += x[i].getElementsByTagName("AVAILABILITY")[0].childNodes[0].nodeValue;
+      table += "</td></tr>";
+    }
+    document.getElementById("demo").innerHTML = table;
+
+     var table = document.getElementById('demo'), rowidx;
+                
+                for(var i = 1; i < table.rows.length; i++)
+                {
+                    table.rows[i].onclick = function()
+                    {
+                         rowidx = this.rowIndex;
+                         document.getElementById("plcommon").value = this.cells[0].innerHTML;
+                         document.getElementById("plbotanical").value = this.cells[1].innerHTML;
+                         document.getElementById("plzone").value = this.cells[2].innerHTML;
+                         document.getElementById("pllight").value = this.cells[3].innerHTML;
+                         document.getElementById("plprice").value = this.cells[4].innerHTML;
+                         document.getElementById("plavailability").value = this.cells[5].innerHTML;
+                    };
+                }
+
+               function saveInput()
+            {
+                table.rows[rowidx].cells[0].innerHTML = document.getElementById("plcommon").value;
+                table.rows[rowidx].cells[1].innerHTML = document.getElementById("plbotanical").value;
+                table.rows[rowidx].cells[2].innerHTML = document.getElementById("plzone").value;
+                table.rows[rowidx].cells[3].innerHTML = document.getElementById("pllight").value;
+                table.rows[rowidx].cells[4].innerHTML = document.getElementById("plprice").value;
+                table.rows[rowidx].cells[5].innerHTML = document.getElementById("plavailability").value;
+            }
+
+    </script>
+</div>
+</div>
+</body>
+</html>
