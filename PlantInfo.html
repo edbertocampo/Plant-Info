@@ -1,105 +1,172 @@
 <!DOCTYPE html>
-<html>
-  <head>  
-    <title> Plants Info </title>
-<!-- CSS only -->
-<link rel="stylesheet" href="plants.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-<!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-  </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Catalog</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="plants.css">
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
 <body>
 
-  <!-- F O R M -->
-  <div id = "content">
-    <div class="sidebar" id='sidebar'>
-  <p class="header">Click on a plant to display its information.</p>
+<!-- Hamburger Button (Only visible on small screens) -->
+<button class="btn btn-dark d-md-none" id="sidebarToggle">
+    ☰
+</button>
 
-  <div class="form-floating mb-3">
-    <input type="text" class="form-control" id="plcommon" placeholder="Common">
-    <label for="plcommon">Common</label>
-  </div><br>
-  <div class="form-floating">
-    <input type="text" class="form-control" id="plbotanical" placeholder="Botanical">
-    <label for="plbotanical">Botanical</label>
-  </div><br>
-  <div class="form-floating">
-    <input type="text" class="form-control" id="plzone" placeholder="Zone">
-    <label for="plzone">Zone</label>
-  </div><br>
-  <div class="form-floating">
-    <input type="text" class="form-control" id="pllight" placeholder="Light:">
-    <label for="pllight">Light</label>
-  </div><br>
-  <div class="form-floating">
-    <input type="text" class="form-control" id="plprice" placeholder="Price">
-    <label for="plprice">Price</label>
-  </div><br>
-  <div class="form-floating">
-    <input type="text" class="form-control" id="plavailability" placeholder="Availability">
-    <label for="plavailability">Availability</label>
-  </div><br>
-  <button type="button" class="btn btn-success" id='btn1' onclick="saveInput();">Save</button><br><br>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 sidebar" id="sidebar">
+            <h4 class="text-white text-center">Plant Info</h4>
+            <p class="text-white text-center">Click on a plant to display its details.</p>
+    
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" id="plcommon" placeholder="Common">
+                <label for="plcommon">Common Name</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" id="plbotanical" placeholder="Botanical">
+                <label for="plbotanical">Botanical Name</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" id="plzone" placeholder="Zone">
+                <label for="plzone">Zone</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" id="pllight" placeholder="Light">
+                <label for="pllight">Light</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" id="plprice" placeholder="Price">
+                <label for="plprice">Price</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="plavailability" placeholder="Availability">
+                <label for="plavailability">Availability</label>
+            </div>
+    
+            <button type="button" class="btn btn-success w-100" id="btnSave" onclick="saveInput();">Save</button>
+        </div>
+    
+        <!-- Main Content -->
+        <div class="col-md-9 main-content">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center" id="demo">
+                    <thead>
+                        <tr>
+                            <th>Common</th>
+                            <th>Botanical</th>
+                            <th>Zone</th>
+                            <th>Light</th>
+                            <th>Price</th>
+                            <th>Availability</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>    
 </div>
-</div>
-<div class="table-container">
-    <div id="content-tray">
-  <table  class="table table-hover" id='demo'></table>
+
+<script>
+  var x, xmlhttp, xmlDoc;
+  xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET", "plants.xml", false);
+  xmlhttp.send();
+  xmlDoc = xmlhttp.responseXML;
+  x = xmlDoc.getElementsByTagName("PLANT");
   
-
-  <script>
-    var x,xmlhttp,xmlDoc
-    xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", "plants.xml", false);
-    xmlhttp.send();
-    xmlDoc = xmlhttp.responseXML; 
-    x = xmlDoc.getElementsByTagName("PLANT");
-    table="<tr><th>COMMON</th><th>BOTANICAL</th><th>ZONE</th><th>LIGHT</th><th>PRICE</th><th>AVAILABILITY</th></tr>";
-    for (i = 0; i <x.length; i++) { 
-      table += "<tr displayPlantInfo(" + i + ")><td>";
-      table += x[i].getElementsByTagName("COMMON")[0].childNodes[0].nodeValue;
-      table += "</td><td>";
-      table += x[i].getElementsByTagName("BOTANICAL")[0].childNodes[0].nodeValue;
-      table += "</td><td>";
-      table += x[i].getElementsByTagName("ZONE")[0].childNodes[0].nodeValue;
-      table += "</td><td>";
-      table += x[i].getElementsByTagName("LIGHT")[0].childNodes[0].nodeValue;
-      table += "</td><td>";
-      table += x[i].getElementsByTagName("PRICE")[0].childNodes[0].nodeValue;
-      table += "</td><td>";
-      table += x[i].getElementsByTagName("AVAILABILITY")[0].childNodes[0].nodeValue;
-      table += "</td></tr>";
+  let plants = [];
+  
+  // Check if localStorage already has data, otherwise populate from XML
+  if (localStorage.getItem("plantsData")) {
+    plants = JSON.parse(localStorage.getItem("plantsData"));
+  } else {
+    for (let i = 0; i < x.length; i++) {
+      plants.push({
+        COMMON: x[i].getElementsByTagName("COMMON")[0].childNodes[0].nodeValue,
+        BOTANICAL: x[i].getElementsByTagName("BOTANICAL")[0].childNodes[0].nodeValue,
+        ZONE: x[i].getElementsByTagName("ZONE")[0].childNodes[0].nodeValue,
+        LIGHT: x[i].getElementsByTagName("LIGHT")[0].childNodes[0].nodeValue,
+        PRICE: x[i].getElementsByTagName("PRICE")[0].childNodes[0].nodeValue,
+        AVAILABILITY: x[i].getElementsByTagName("AVAILABILITY")[0].childNodes[0].nodeValue,
+      });
+    }
+    localStorage.setItem("plantsData", JSON.stringify(plants)); // Save to localStorage
+  }
+  
+  function renderTable() {
+    let table = "<tr><th>COMMON</th><th>BOTANICAL</th><th>ZONE</th><th>LIGHT</th><th>PRICE</th><th>AVAILABILITY</th></tr>";
+    for (let i = 0; i < plants.length; i++) {
+      table += `<tr onclick="selectRow(${i})">
+                  <td>${plants[i].COMMON}</td>
+                  <td>${plants[i].BOTANICAL}</td>
+                  <td>${plants[i].ZONE}</td>
+                  <td>${plants[i].LIGHT}</td>
+                  <td>${plants[i].PRICE}</td>
+                  <td>${plants[i].AVAILABILITY}</td>
+                </tr>`;
     }
     document.getElementById("demo").innerHTML = table;
+  }
+  
+  renderTable(); // Initial rendering
+  
+  let selectedRowIndex = -1;
+  
+  function selectRow(index) {
+    selectedRowIndex = index;
+    let plant = plants[index];
+  
+    document.getElementById("plcommon").value = plant.COMMON;
+    document.getElementById("plbotanical").value = plant.BOTANICAL;
+    document.getElementById("plzone").value = plant.ZONE;
+    document.getElementById("pllight").value = plant.LIGHT;
+    document.getElementById("plprice").value = plant.PRICE;
+    document.getElementById("plavailability").value = plant.AVAILABILITY;
+  }
+  
+  function saveInput() {
+    if (selectedRowIndex === -1) {
+      alert("Please select a row first.");
+      return;
+    }
+  
+    // Update the selected plant data
+    plants[selectedRowIndex] = {
+      COMMON: document.getElementById("plcommon").value,
+      BOTANICAL: document.getElementById("plbotanical").value,
+      ZONE: document.getElementById("plzone").value,
+      LIGHT: document.getElementById("pllight").value,
+      PRICE: document.getElementById("plprice").value,
+      AVAILABILITY: document.getElementById("plavailability").value,
+    };
+  
+    // Save updated data to localStorage
+    localStorage.setItem("plantsData", JSON.stringify(plants));
+  
+    // Re-render table to reflect changes
+    renderTable();
+  
+    alert("Plant information updated successfully!");
+  }
+  
+  // Sidebar Toggle for Mobile
+  document.getElementById("sidebarToggle").addEventListener("click", function () {
+    document.getElementById("sidebar").classList.toggle("active");
+  });
+  
 
-     var table = document.getElementById('demo'), rowidx;
-                
-                for(var i = 1; i < table.rows.length; i++)
-                {
-                    table.rows[i].onclick = function()
-                    {
-                         rowidx = this.rowIndex;
-                         document.getElementById("plcommon").value = this.cells[0].innerHTML;
-                         document.getElementById("plbotanical").value = this.cells[1].innerHTML;
-                         document.getElementById("plzone").value = this.cells[2].innerHTML;
-                         document.getElementById("pllight").value = this.cells[3].innerHTML;
-                         document.getElementById("plprice").value = this.cells[4].innerHTML;
-                         document.getElementById("plavailability").value = this.cells[5].innerHTML;
-                    };
-                }
+</script>
 
-               function saveInput()
-            {
-                table.rows[rowidx].cells[0].innerHTML = document.getElementById("plcommon").value;
-                table.rows[rowidx].cells[1].innerHTML = document.getElementById("plbotanical").value;
-                table.rows[rowidx].cells[2].innerHTML = document.getElementById("plzone").value;
-                table.rows[rowidx].cells[3].innerHTML = document.getElementById("pllight").value;
-                table.rows[rowidx].cells[4].innerHTML = document.getElementById("plprice").value;
-                table.rows[rowidx].cells[5].innerHTML = document.getElementById("plavailability").value;
-            }
-
-    </script>
-</div>
-</div>
 </body>
 </html>
